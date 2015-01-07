@@ -41,11 +41,11 @@ files on Internet:
 
 * For the instructions without the solutions:
 
-  http://nbviewer.ipython.org/github/GaelVaroquaux/sklearn_pandas_tutorial/tree/master/notebooks/
+  http://nbviewer.ipython.org/github/GaelVaroquaux/nilearn_course/tree/master/notebooks/
 
 * For the instructions and the solutions:
 
-  http://nbviewer.ipython.org/github/GaelVaroquaux/sklearn_pandas_tutorial/tree/master/rendered_notebooks
+  http://nbviewer.ipython.org/github/GaelVaroquaux/nilearn_course/tree/master/rendered_notebooks
 
 Downloading the Tutorial Materials
 ----------------------------------
