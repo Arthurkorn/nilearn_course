@@ -18,6 +18,11 @@ Installation Notes
 Please follow the nilearn installation notes:
 http://nilearn.github.io/introduction.html#installation
 
+**At telecom**: use the local install of anaconda:
+
+     export PATH=/cal/softs/anaconda/anaconda-2.0.1/bin/:$PATH
+
+
 Reading the training materials
 -------------------------------
 
