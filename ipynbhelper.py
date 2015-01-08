@@ -94,7 +94,7 @@ def run_cell(shell, iopub, cell, timeout=300):
     return outs, failed, reply['payload']
 
 
-def run_notebook(nb):
+def run_notebook(nb, save_output=False):
     km = KernelManager()
     km.start_kernel(stderr=open(os.devnull, 'w'))
     if hasattr(km, 'client'):
@@ -138,7 +138,8 @@ def run_notebook(nb):
                 cells += 1
                 sys.stdout.write('.')
                 rendered_cells.append(new_cell)
-        ws.cells = rendered_cells
+        if save_output:
+            ws.cells = rendered_cells
 
     print()
     print("ran notebook %s" % nb.metadata.name)
@@ -158,11 +159,11 @@ def process_notebook_file(fname, action='clean', output_fname=None):
 
     if action == 'check':
         os.chdir(os.path.dirname(fname))
-        run_notebook(nb)
+        run_notebook(nb, save_output=False)
         remove_outputs(nb)
         remove_signature(nb)
     elif action == 'render':
-        os.chdir(os.path.dirname(fname))
+        os.chdir(os.path.dirname(fname), save_output=True)
         run_notebook(nb)
     else:
         # Clean by default
