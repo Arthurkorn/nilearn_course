@@ -163,8 +163,8 @@ def process_notebook_file(fname, action='clean', output_fname=None):
         remove_outputs(nb)
         remove_signature(nb)
     elif action == 'render':
-        os.chdir(os.path.dirname(fname), save_output=True)
-        run_notebook(nb)
+        os.chdir(os.path.dirname(fname))
+        run_notebook(nb, save_output=True)
     else:
         # Clean by default
         remove_outputs(nb)
