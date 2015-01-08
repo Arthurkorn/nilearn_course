@@ -90,7 +90,8 @@ def run_cell(shell, iopub, cell, timeout=300):
             print("unhandled iopub msg: %s" % msg_type)
 
         outs.append(out)
-    return outs, failed
+    # We return the payload to be able to handle the "%load" magic
+    return outs, failed, reply['payload']
 
 
 def run_notebook(nb):
@@ -114,16 +115,30 @@ def run_notebook(nb):
     cells = 0
     failures = 0
     for ws in nb.worksheets:
+        rendered_cells = list()
         for cell in ws.cells:
+            rendered_cells.append(cell)
             if cell.cell_type != 'code':
                 continue
 
-            outputs, failed = run_cell(shell, iopub, cell)
+            outputs, failed, payload = run_cell(shell, iopub, cell)
             cell.outputs = outputs
             cell['prompt_number'] = cells
             failures += failed
             cells += 1
             sys.stdout.write('.')
+            # Very hacky code to execute the loaded Python code
+            if payload and payload[0]['source'] == 'set_next_input':
+                new_cell = cell.copy()
+                new_cell["input"] = payload[0]["text"]
+                outputs, failed, _ = run_cell(shell, iopub, new_cell)
+                new_cell.outputs = outputs
+                new_cell['prompt_number'] = cells
+                failures += failed
+                cells += 1
+                sys.stdout.write('.')
+                rendered_cells.append(new_cell)
+        ws.cells = rendered_cells
 
     print()
     print("ran notebook %s" % nb.metadata.name)
